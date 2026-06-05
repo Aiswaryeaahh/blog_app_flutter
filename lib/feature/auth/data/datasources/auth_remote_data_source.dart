@@ -21,7 +21,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String email,
     required String password,
   }) {
-    
     throw UnimplementedError();
   }
 
@@ -45,4 +44,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw ServerException(e.toString());
     }
   }
+  
+ 
 }
