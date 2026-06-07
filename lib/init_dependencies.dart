@@ -27,14 +27,9 @@ void _initAuth() {
     () => AuthRepositoryImpl(serviceLocator()),
   );
 
-  serviceLocator.registerFactory(
-    () => UserSignUp(serviceLocator())
-  );
+  serviceLocator.registerFactory(() => UserSignUp(serviceLocator()));
 
   serviceLocator.registerLazySingleton(
-    () => AuthBloc(userSignUp : serviceLocator(),
-    ),
+    () => AuthBloc(userSignUp: serviceLocator()),
   );
-
-
 }
