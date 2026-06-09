@@ -57,9 +57,17 @@ class AuthRepositoryImpl implements AuthRepository {
 
       return right(user);
     } on sb.AuthException catch (e) {
-      return left(Failure(e.message));
+      return left(Failure(_authErrorMessage(e)));
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }
+  }
+
+  String _authErrorMessage(sb.AuthException exception) {
+    if (exception.code == 'email_not_confirmed') {
+      return 'Please confirm your email before signing in. Check your inbox for the Supabase confirmation link.';
+    }
+
+    return exception.message;
   }
 }

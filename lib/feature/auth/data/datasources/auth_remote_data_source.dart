@@ -37,6 +37,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         throw ServerException('User is null');
       }
       return UserModel.fromJson(response.user!.toJson());
+    } on AuthException {
+      rethrow;
     } catch (e) {
       throw ServerException(e.toString());
     }
@@ -57,7 +59,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (response.user == null) {
         throw ServerException('User is null');
       }
+      if (response.session == null) {
+        throw const AuthException(
+          'Please confirm your email before signing in.',
+          statusCode: '400',
+          code: 'email_not_confirmed',
+        );
+      }
       return UserModel.fromJson(response.user!.toJson());
+    } on AuthException {
+      rethrow;
     } catch (e) {
       throw ServerException(e.toString());
     }
@@ -71,9 +82,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             .from('profiles')
             .select()
             .eq('id', currentUserSession!.user.id);
-        return UserModel.fromJson(userData.first).copyWith(
-          email: currentUserSession!.user.email,
-        );
+        return UserModel.fromJson(
+          userData.first,
+        ).copyWith(email: currentUserSession!.user.email);
       }
 
       return null;
